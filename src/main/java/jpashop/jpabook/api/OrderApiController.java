@@ -5,6 +5,7 @@ import jpashop.jpabook.domain.entity.OrderSearch;
 import jpashop.jpabook.domain.entity.embedded.Address;
 import jpashop.jpabook.domain.entity.enums.OrderStatus;
 import jpashop.jpabook.repository.OrderRepository;
+import jpashop.jpabook.repository.SimpleOrderQueryDto2;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,11 +58,11 @@ public class OrderApiController {
     }
 
     @GetMapping("/api/v2/simple-orders")
-    public List<SimpleOrderDto> ordersV2(){
+    public List<SimpleOrderQueryDto> ordersV2(){
         var orders = orderRepository.findAllByString(new OrderSearch(null,null));
 
-        List<SimpleOrderDto> collect = orders.stream()
-                .map(o -> new SimpleOrderDto(o))
+        List<SimpleOrderQueryDto> collect = orders.stream()
+                .map(o -> new SimpleOrderQueryDto(o))
                 .collect(toList());
 
         return collect;
@@ -74,24 +75,28 @@ public class OrderApiController {
      * - 컬렉션 관계는 hibernate.default_batch_fetch_size, @BatchSize로 최적화
      */
     @GetMapping("/api/v3/simple-orders")
-    public List<SimpleOrderDto> ordersV3(){
+    public List<SimpleOrderQueryDto> ordersV3(){
         var resultList = orderRepository.findAllwithMemberDelivery();
         var collect = resultList.stream()
-                .map(SimpleOrderDto::new)
+                .map(SimpleOrderQueryDto::new)
                 .collect(toList());
         return collect;
+    }  
+    
+    @GetMapping("/api/v4/simple-orders")
+    public List<SimpleOrderQueryDto2> ordersV4(){
+        return orderRepository.findOrderDto();
     }
 
-
     @Data
-    class SimpleOrderDto{
+    public class SimpleOrderQueryDto {
         private Long orderId;
         private String name;
         private LocalDateTime orderDate;
         private OrderStatus orderStatus;
         private Address address;
 
-        public SimpleOrderDto(Order order){
+        public SimpleOrderQueryDto(Order order){
             orderId = order.getId();
             name = order.getName();
             orderDate = order.getOrderDate();
@@ -99,5 +104,4 @@ public class OrderApiController {
             address = order.getDelivery().getAddress();
         }
     }
-
 }
