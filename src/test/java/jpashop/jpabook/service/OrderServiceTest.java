@@ -1,18 +1,14 @@
 package jpashop.jpabook.service;
 
 import jakarta.persistence.EntityManager;
-import jpashop.jpabook.domain.entity.Delivery;
 import jpashop.jpabook.domain.entity.Member;
 import jpashop.jpabook.domain.entity.Order;
-import jpashop.jpabook.domain.entity.OrderItem;
 import jpashop.jpabook.domain.entity.embedded.Address;
 import jpashop.jpabook.domain.entity.enums.OrderStatus;
 import jpashop.jpabook.domain.entity.exception.NotEnoughtStockException;
 import jpashop.jpabook.domain.entity.item.Book;
 import jpashop.jpabook.domain.entity.item.Item;
-import jpashop.jpabook.repository.ItemRepository;
-import jpashop.jpabook.repository.OrderRepository;
-import org.aspectj.weaver.ast.Or;
+import jpashop.jpabook.repository.order.OrderRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

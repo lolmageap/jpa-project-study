@@ -1,4 +1,4 @@
-package jpashop.jpabook.repository;
+package jpashop.jpabook.repository.order;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -6,6 +6,7 @@ import jakarta.persistence.criteria.*;
 import jpashop.jpabook.domain.entity.Member;
 import jpashop.jpabook.domain.entity.Order;
 import jpashop.jpabook.domain.entity.OrderSearch;
+import jpashop.jpabook.domain.dto.simpleQuery.SimpleOrderQueryDto2;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Repository;
@@ -89,7 +90,7 @@ public class OrderRepository {
     }
 
     @Transactional
-    public List<Order> findAllwithMemberDelivery() {
+    public List<Order> findAllWithMemberDelivery() {
         return  em.createQuery("select o from Order o " +
                 "join fetch o.member m " +
                 "join fetch o.delivery d", Order.class).getResultList();
@@ -97,10 +98,30 @@ public class OrderRepository {
     @Transactional
     public List<SimpleOrderQueryDto2> findOrderDto() {
         return em.createQuery(
-                "select new jpashop.jpabook.repository.SimpleOrderQueryDto2(o.id, m.name, o.orderDate, o.status, d.address) from Order o " +
+                "select new jpashop.jpabook.repository.order.simpleQuery.SimpleOrderQueryDto2(o.id, m.name, o.orderDate, o.status, d.address) from Order o " +
                 "join o.member m " +
                 "join o.delivery d",
                 SimpleOrderQueryDto2.class)
                 .getResultList();
     }
+
+    public List<Order> findAllWithItem(OrderSearch orderSearch) {
+        return em.createQuery("select distinct o from Order o " +
+                "join fetch o.member m " +
+                "join fetch o.delivery d " +
+                "join fetch o.orderItems oi " +
+                "join fetch oi.item i"
+                , Order.class).getResultList();
+    }
+
+
+    public List<Order> findAllWithItemPaging(OrderSearch orderSearch, int offset, int limit) {
+        return em.createQuery("select distinct o from Order o " +
+                        "join fetch o.member m " +
+                        "join fetch o.delivery d", Order.class)
+                        .setFirstResult(offset)
+                        .setMaxResults(limit)
+                        .getResultList();
+    }
+
 }

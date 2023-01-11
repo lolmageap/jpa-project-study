@@ -1,5 +1,6 @@
 package jpashop.jpabook.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jpashop.jpabook.domain.entity.enums.DeliveryStatus;
 import jpashop.jpabook.domain.entity.enums.OrderStatus;
@@ -26,6 +27,8 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
     @OneToOne(cascade = CascadeType.ALL)
@@ -56,6 +59,7 @@ public class Order {
         this.orderItems.add(orderItem);
         orderItem.setOrder(this);
     }
+
 
 
     /* 생성 메서드 */

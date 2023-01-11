@@ -4,7 +4,7 @@ import jpashop.jpabook.domain.entity.*;
 import jpashop.jpabook.domain.entity.item.Item;
 import jpashop.jpabook.repository.ItemRepository;
 import jpashop.jpabook.repository.MemberRepository;
-import jpashop.jpabook.repository.OrderRepository;
+import jpashop.jpabook.repository.order.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
